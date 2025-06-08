@@ -1,0 +1,11 @@
+# Ignore dataset
+/data/*.csv
+/data/*.json
+
+# Ignore system files
+__pycache__/
+.venv/
+*.log
+*.cfg
+
+.DS_Store
