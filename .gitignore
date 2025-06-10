@@ -8,4 +8,8 @@ __pycache__/
 *.log
 *.cfg
 
+node_modules/
+
+package-lock.json
+
 .DS_Store
