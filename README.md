@@ -21,6 +21,7 @@ This project demonstrates how to build and query a **MongoDB sharded cluster** u
 
 ## 📁 Project Structure
 
+```
 mongodb_sharding_database/
 ├── data/ # Contains cleaned CSV and JSON datasets (ignored by Git to avoid slow push on GitHub)
 │ └── cleaned_airbnb_listings.csv
@@ -36,6 +37,7 @@ mongodb_sharding_database/
 ├── package.json
 ├── README.md
 └── requirements.txt # Python dependencies
+```
 
 ## Setup Instructions
 
@@ -50,14 +52,19 @@ cd sharding_database_mongodb
 
 -   Convert the CSV file to JSON (JSONL) with this command:
 
+```
 python src/convert_csv_to_json.py # From the root directory
+```
 
 ### Spin up MongoDB Cluster with Docker
 
--   run docker compose up -d # Need to be inside sharding_database folder to run this command.
+```
+run docker compose up -d # Need to be inside sharding_database folder to run this command.
+```
 
 ### Initiate Replica Sets
 
+```
 -   docker exec -it configsvr1 mongosh --port 27019
     rs.initiate({ \_id: "configReplSet", configsvr: true, members: [{ _id: 0, host: "configsvr1:27019" }] })
 
@@ -66,46 +73,61 @@ python src/convert_csv_to_json.py # From the root directory
 
 -   docker exec -it shard2 mongosh --port 27020
     rs.initiate({ \_id: "shardReplSet2", members: [{ _id: 0, host: "shard2:27020" }] })
+```
 
 ### Enable sharding (from root directory)
 
+```
 -   mongosh --host localhost:27017
 -   load("src/initiate_cluster.js")
+```
 
 ### Data Insertion
 
+```
 -   run node src/insert_data.js # Make sure you have installed nodeJS into your Computer
+```
 
 ### Query Examples
 
 #### Count documents
 
+```
 -   db.listings.countDocuments()
+```
 
 #### Listings in Camden
 
+```
 -   db.listings.find({ neighbourhood: "Camden" }).limit(5).pretty()
+```
 
 #### Entire flats under £100
 
+```
 -   db.listings.find({
     room_type: "Entire home/apt",
     price: { $lte: 100 }
     }).limit(5).pretty()
+```
 
 #### Geo-filtered listings
 
+```
 -   db.listings.find({
     latitude: { $gt: 51.5 },
     longitude: { $lt: -0.1 }
     }).limit(5).pretty()
+```
 
 ### Sharding Strategy
 
+```
 -   Shard key: neighbourhood
 -   Rationale: High cardinality, well distributed, commonly queried
 -   Shards: shardReplSet1, shardReplSet2
 -   Verified using: sh.status()
+```
 
 ## About Me:
 
