@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+    configsvr1:
+        container_name: configsvr1
+        image: mongo:6.0
+        ports:
+            - 27019:27019
+        command:
+            [
+                "mongod",
+                "--configsvr",
+                "--replSet",
+                "configReplSet",
+                "--port",
+                "27019",
+            ]
+
+    shard1:
+        container_name: shard1
+        image: mongo:6.0
+        ports:
+            - 27018:27018
+        command:
+            [
+                "mongod",
+                "--shardsvr",
+                "--replSet",
+                "shardReplSet1",
+                "--port",
+                "27018",
+            ]
+
+    shard2:
+        container_name: shard2
+        image: mongo:6.0
+        ports:
+            - 27020:27020
+        command:
+            [
+                "mongod",
+                "--shardsvr",
+                "--replSet",
+                "shardReplSet2",
+                "--port",
+                "27020",
+            ]
+
+    mongos:
+        container_name: mongos
+        image: mongo:6.0
+        depends_on:
+            - configsvr1
+            - shard1
+            - shard2
+        ports:
+            - 27017:27017
+        command: >
+            bash -c "
+              sleep 10 &&
+              mongos --configdb configReplSet/configsvr1:27019 --bind_ip_all"
