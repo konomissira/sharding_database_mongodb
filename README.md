@@ -66,33 +66,33 @@ python src/convert_csv_to_json.py # From the root directory
 ### Spin up MongoDB Cluster with Docker
 
 ```
-run docker compose up -d # Need to be inside sharding_database folder to run this command.
+ docker compose up -d # Need to be inside sharding_database folder to run this command.
 ```
 
 ### Initiate Replica Sets
 
 ```
--   docker exec -it configsvr1 mongosh --port 27019
+   docker exec -it configsvr1 mongosh --port 27019
     rs.initiate({ \_id: "configReplSet", configsvr: true, members: [{ _id: 0, host: "configsvr1:27019" }] })
 
--   docker exec -it shard1 mongosh --port 27018
+   docker exec -it shard1 mongosh --port 27018
     rs.initiate({ \_id: "shardReplSet1", members: [{ _id: 0, host: "shard1:27018" }] })
 
--   docker exec -it shard2 mongosh --port 27020
+   docker exec -it shard2 mongosh --port 27020
     rs.initiate({ \_id: "shardReplSet2", members: [{ _id: 0, host: "shard2:27020" }] })
 ```
 
 ### Enable sharding (from root directory)
 
 ```
--   mongosh --host localhost:27017
--   load("src/initiate_cluster.js")
+   mongosh --host localhost:27017
+   load("src/initiate_cluster.js")
 ```
 
 ### Data Insertion
 
 ```
--   run node src/insert_data.js # Make sure you have installed nodeJS into your Computer
+ node src/insert_data.js # Make sure you have installed nodeJS into your Computer
 ```
 
 ### Query Examples
@@ -100,19 +100,19 @@ run docker compose up -d # Need to be inside sharding_database folder to run thi
 #### Count documents
 
 ```
--   db.listings.countDocuments()
+   db.listings.countDocuments()
 ```
 
 #### Listings in Camden
 
 ```
--   db.listings.find({ neighbourhood: "Camden" }).limit(5).pretty()
+   db.listings.find({ neighbourhood: "Camden" }).limit(5).pretty()
 ```
 
 #### Entire flats under £100
 
 ```
--   db.listings.find({
+   db.listings.find({
     room_type: "Entire home/apt",
     price: { $lte: 100 }
     }).limit(5).pretty()
@@ -121,7 +121,7 @@ run docker compose up -d # Need to be inside sharding_database folder to run thi
 #### Geo-filtered listings
 
 ```
--   db.listings.find({
+   db.listings.find({
     latitude: { $gt: 51.5 },
     longitude: { $lt: -0.1 }
     }).limit(5).pretty()
