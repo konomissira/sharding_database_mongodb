@@ -1,5 +1,12 @@
 # MongoDB Sharding Project – Airbnb London Listings
 
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white&style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=for-the-badge)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white&style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
+![pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white&style=for-the-badge)
+![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white&style=for-the-badge)
+
 This project demonstrates how to build and query a **MongoDB sharded cluster** using Docker and insert real-world data from the **Airbnb London listings** dataset. It simulates a production grade environment and showcases horisontal scaling using sharding.
 
 ## Project Goals
