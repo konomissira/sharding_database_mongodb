@@ -110,7 +110,9 @@ exit # To exit mongosh
 
 #### Shard 2
 
+```
 docker exec -it shard2 mongosh --port 27020
+```
 
 Inside mongosh:
 
