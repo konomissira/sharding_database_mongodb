@@ -66,33 +66,88 @@ python src/convert_csv_to_json.py # From the root directory
 ### Spin up MongoDB Cluster with Docker
 
 ```
- docker compose up -d # Need to be inside sharding_database folder to run this command.
+cd sharding_database
+docker compose up -d
 ```
 
-### Initiate Replica Sets
+## MongoDB Sharding Configuration & Data Insertion
+
+### Step 1: Initiate the Config Server Replica Set
 
 ```
-   docker exec -it configsvr1 mongosh --port 27019
-    rs.initiate({ \_id: "configReplSet", configsvr: true, members: [{ _id: 0, host: "configsvr1:27019" }] })
-
-   docker exec -it shard1 mongosh --port 27018
-    rs.initiate({ \_id: "shardReplSet1", members: [{ _id: 0, host: "shard1:27018" }] })
-
-   docker exec -it shard2 mongosh --port 27020
-    rs.initiate({ \_id: "shardReplSet2", members: [{ _id: 0, host: "shard2:27020" }] })
+docker exec -it configsvr1 mongosh --port 27019
 ```
 
-### Enable sharding (from root directory)
+Inside mongosh:
 
 ```
-   mongosh --host localhost:27017
-   load("src/initiate_cluster.js")
+rs.initiate({
+  _id: "configReplSet",
+  configsvr: true,
+  members: [{ _id: 0, host: "configsvr1:27019" }]
+})
+exit #To exit mongosh
 ```
 
-### Data Insertion
+### Step 2: Initiate Each Shard Replica Set
+
+#### Shard 1
 
 ```
- node src/insert_data.js # Make sure you have installed nodeJS into your Computer
+docker exec -it shard1 mongosh --port 27018
+```
+
+Inside mongosh:
+
+```
+   rs.initiate({
+  _id: "shardReplSet1",
+  members: [{ _id: 0, host: "shard1:27018" }]
+})
+
+exit # To exit mongosh
+```
+
+#### Shard 2
+
+docker exec -it shard2 mongosh --port 27020
+
+Inside mongosh:
+
+```
+rs.initiate({
+  _id: "shardReplSet2",
+  members: [{ _id: 0, host: "shard2:27020" }]
+})
+
+exit # To exit mongosh
+```
+
+### Step 3: Enable Sharding
+
+```
+mongosh --host localhost:27017
+```
+
+Then run:
+
+```
+load("src/initiate_cluster.js")
+```
+
+### Step 4: Insert Data into airbnb.listings
+
+Install dependencies (only once):
+
+```
+npm init -y
+npm install mongodb
+```
+
+Then run the insert script:
+
+```
+ node src/insert_data.js
 ```
 
 ### Query Examples
